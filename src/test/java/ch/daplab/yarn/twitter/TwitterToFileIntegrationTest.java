@@ -3,6 +3,7 @@ package ch.daplab.yarn.twitter;
 import ch.daplab.yarn.twill.AbstractTwillLauncher;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by mil2048 on 4/23/15.
  */
+@Ignore
 public class TwitterToFileIntegrationTest extends AbstractTwillLauncher {
 
     @Test

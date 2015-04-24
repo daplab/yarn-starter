@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class SimpleTwillTest extends AbstractTwillLauncher {
 
-    @Test
+    @Test(timeout =  20000)
     public void twillSimpleTest() throws InterruptedException, URISyntaxException {
 
         // Instantiate TwillRunnerService, and waiting for it to start

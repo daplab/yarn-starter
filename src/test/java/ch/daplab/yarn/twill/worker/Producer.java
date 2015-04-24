@@ -107,7 +107,7 @@ public class Producer extends AbstractTwillRunnable {
             try {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(60));
             } catch (InterruptedException e) {
-                // let this process sliently die.
+                // let this process silently die.
             }
 
             LOG.info("Now closing.");

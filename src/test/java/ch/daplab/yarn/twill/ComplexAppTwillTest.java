@@ -2,6 +2,7 @@ package ch.daplab.yarn.twill;
 
 import ch.daplab.yarn.twill.worker.Consumer;
 import ch.daplab.yarn.twill.worker.Producer;
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.Service;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.twill.api.*;
@@ -34,7 +35,7 @@ public class ComplexAppTwillTest extends AbstractTwillLauncher {
     public static final String REDIS_SERVICE_NAME = "redis1";
     public static final String REDIS_QUEUE_NAME = "queue1";
 
-    @Test
+    @Test(timeout = 120000)
     public void twillSimpleTest() throws InterruptedException, URISyntaxException {
 
         // Instantiate TwillRunnerService, and waiting for it to start
@@ -71,9 +72,10 @@ public class ComplexAppTwillTest extends AbstractTwillLauncher {
         // and sending commands to them
 
         // Just wait until the app completes. A matter of seconds...
-        while (controller.isRunning()) {
-            Thread.sleep(200);
-        }
+        Preconditions.checkState(controller.isRunning());
+
+        // Give some time to the app to complete
+        Thread.sleep(20000);
 
         // Shutting down properly
         controller.stopAndWait();
@@ -114,7 +116,7 @@ public class ComplexAppTwillTest extends AbstractTwillLauncher {
                         .add(Consumer.class.getName(), new Consumer(), ResourceSpecification.Builder.with()
                                 .setVirtualCores(1)
                                 .setMemory(256, ResourceSpecification.SizeUnit.MEGA)
-                                .setInstances(3)
+                                .setInstances(2)
                                 .build()).noLocalFiles()
 
                         //.withOrder()
