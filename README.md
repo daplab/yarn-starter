@@ -45,7 +45,7 @@ later on, with proper partitions.
 
 ### Configure it
 
-The Twitter keys and secrets are currently hardcoded in [`TwitterObservable.java`](src/main/java/ch/daplab/yarn/twitter/rx/TwitterObservable.java) (yeah, it's in the TODO list :))
+The Twitter keys and secrets are currently hardcoded in [`TwitterObservable.java`](src/main/java/ch/daplab/yarn/twitter/rx/TwitterObservable.java) (yeah, it's in the [TODO list](https://github.com/daplab/yarn-starter/issues/1) :))
 Please store them there *before* building.
 
 ### Build it
