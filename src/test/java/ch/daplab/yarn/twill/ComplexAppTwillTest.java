@@ -3,32 +3,25 @@ package ch.daplab.yarn.twill;
 import ch.daplab.yarn.twill.worker.Consumer;
 import ch.daplab.yarn.twill.worker.Producer;
 import com.google.common.base.Preconditions;
-import com.google.common.util.concurrent.Service;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
 import org.apache.twill.api.*;
 import org.apache.twill.api.logging.PrinterLogHandler;
 import org.apache.twill.yarn.YarnTwillRunnerService;
-
 import org.junit.Test;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * "Simple" Twill application which is launching two types of Runnable:
- *
+ * <p/>
  * * {@link Producer}: will produce random messages and push them in a Redis queue.
- *                     Only one instance of the {@link Producer} will be started
+ * Only one instance of the {@link Producer} will be started
  * * {@link Consumer}: will use Twill service discovery to get the Redis instance,
- *                     and will poll the message from there. Initially 3 instances
- *                     of {@link Consumer} will be started, and this number might change
- *
+ * and will poll the message from there. Initially 3 instances
+ * of {@link Consumer} will be started, and this number might change
  */
 public class ComplexAppTwillTest extends AbstractTwillLauncher {
 
@@ -85,45 +78,44 @@ public class ComplexAppTwillTest extends AbstractTwillLauncher {
 
     /**
      * TwillApplication definition.
-     *
+     * <p/>
      * This is required only when more than one several different Runnable
      * is started. Otherwise {@link TwillRunnerService#prepare(TwillRunnable)}
      * works perfectly too.
-     *
+     * <p/>
      * This {@link TwillApplication} will start two {@link Runnable}:
      * * 1 instance of {@link Producer}
      * * 3 instances of {@link Consumer}
-     *
      */
     public static class MyTwillApp implements TwillApplication {
 
         @Override
         public TwillSpecification configure() {
             //try {
-                return TwillSpecification.Builder.with()
-                        .setName(MyTwillApp.class.getName())
+            return TwillSpecification.Builder.with()
+                    .setName(MyTwillApp.class.getName())
 
-                        .withRunnable()
+                    .withRunnable()
 
-                        .add(Producer.class.getName(), new Producer(), ResourceSpecification.Builder.with()
-                                .setVirtualCores(1)
-                                .setMemory(512, ResourceSpecification.SizeUnit.MEGA)
-                                .setInstances(1)
-                                .build()).noLocalFiles()
-                //withLocalFiles()
-                //.add("log4j.properties", getClass().getClassLoader().getResource("log4j.properties").toURI()).apply()
+                    .add(Producer.class.getName(), new Producer(), ResourceSpecification.Builder.with()
+                            .setVirtualCores(1)
+                            .setMemory(512, ResourceSpecification.SizeUnit.MEGA)
+                            .setInstances(1)
+                            .build()).noLocalFiles()
+                            //withLocalFiles()
+                            //.add("log4j.properties", getClass().getClassLoader().getResource("log4j.properties").toURI()).apply()
 
-                        .add(Consumer.class.getName(), new Consumer(), ResourceSpecification.Builder.with()
-                                .setVirtualCores(1)
-                                .setMemory(256, ResourceSpecification.SizeUnit.MEGA)
-                                .setInstances(2)
-                                .build()).noLocalFiles()
+                    .add(Consumer.class.getName(), new Consumer(), ResourceSpecification.Builder.with()
+                            .setVirtualCores(1)
+                            .setMemory(256, ResourceSpecification.SizeUnit.MEGA)
+                            .setInstances(2)
+                            .build()).noLocalFiles()
 
-                        //.withOrder()
-                        //.begin(Producer.class.getName())
-                        //.nextWhenStarted(Consumer.class.getName())
-                        .anyOrder()
-                        .build();
+                            //.withOrder()
+                            //.begin(Producer.class.getName())
+                            //.nextWhenStarted(Consumer.class.getName())
+                    .anyOrder()
+                    .build();
             //} catch (URISyntaxException e) {
             //    e.printStackTrace();
             //    throw new RuntimeException("Can't find classpath:log4j.properties", e);

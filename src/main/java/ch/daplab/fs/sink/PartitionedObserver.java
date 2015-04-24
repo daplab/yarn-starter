@@ -79,7 +79,8 @@ public class PartitionedObserver implements Observer<byte[]> {
                 retry++;
                 try {
                     Thread.sleep(50);
-                } catch (InterruptedException e1) {}
+                } catch (InterruptedException e1) {
+                }
             }
         } while (!written && retry < 3);
 

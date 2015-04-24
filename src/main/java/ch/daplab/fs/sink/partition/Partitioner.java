@@ -39,8 +39,8 @@ public class Partitioner {
                 .append(prefix)
                 .append("|")
                 .append(simpleDateFormatString)
-        .append("|")
-        .append(suffix);
+                .append("|")
+                .append(suffix);
         return sb.toString();
     }
 }

@@ -1,6 +1,5 @@
 package ch.daplab.fs.sink;
 
-import ch.daplab.yarn.twitter.TwitterToHDFSCli;
 import com.google.common.io.Files;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -18,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static ch.daplab.yarn.twitter.TwitterToHDFSCli.*;
+import static ch.daplab.yarn.twitter.TwitterToHDFSCli.DEFAULT_FILE_SUFFIX;
+import static ch.daplab.yarn.twitter.TwitterToHDFSCli.DEFAULT_PARTITION_FORMAT;
 
 /**
  * Created by mil2048 on 4/22/15.

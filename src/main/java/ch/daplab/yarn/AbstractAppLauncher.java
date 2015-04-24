@@ -76,9 +76,9 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
         zkConnect = (String) options.valueOf(OPTION_ZK_CONNECT);
 
         curatorFramework = CuratorFrameworkFactory.builder()
-                    .connectString(zkConnect)
-                    .retryPolicy(new ExponentialBackoffRetry(1000, 3))
-                    .build();
+                .connectString(zkConnect)
+                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
+                .build();
         curatorFramework.start();
 
 

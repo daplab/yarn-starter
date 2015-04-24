@@ -44,7 +44,7 @@ public class TwitterToHDFSCli extends AbstractAppLauncher {
     @Override
     protected int internalRun() throws Exception {
 
-        String defaultFS = (String)getOptions().valueOf(OPTION_FS_DEFAULTFS);
+        String defaultFS = (String) getOptions().valueOf(OPTION_FS_DEFAULTFS);
         if (defaultFS == null) {
             defaultFS = FileSystem.getDefaultUri(getConf()).toString();
         }

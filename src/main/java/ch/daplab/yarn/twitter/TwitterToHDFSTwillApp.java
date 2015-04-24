@@ -35,7 +35,7 @@ public class TwitterToHDFSTwillApp extends AbstractTwillRunnable {
 
         final Configuration conf = new Configuration();
 
-        String defaultFs = (String)optionSet.valueOf(OPTION_FS_DEFAULTFS);
+        String defaultFs = (String) optionSet.valueOf(OPTION_FS_DEFAULTFS);
 
         if (defaultFs != null) {
             conf.set("fs.defaultFS", defaultFs);
@@ -53,7 +53,8 @@ public class TwitterToHDFSTwillApp extends AbstractTwillRunnable {
             if (fs != null) {
                 try {
                     fs.close();
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
             }
         }
     }

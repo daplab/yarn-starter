@@ -1,9 +1,9 @@
 package ch.daplab.yarn.twill;
 
-import ch.daplab.yarn.twill.worker.Consumer;
-import ch.daplab.yarn.twill.worker.Producer;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
-import org.apache.twill.api.*;
+import org.apache.twill.api.AbstractTwillRunnable;
+import org.apache.twill.api.TwillController;
+import org.apache.twill.api.TwillRunnerService;
 import org.apache.twill.api.logging.PrinterLogHandler;
 import org.apache.twill.yarn.YarnTwillRunnerService;
 import org.junit.Test;
@@ -13,14 +13,12 @@ import org.slf4j.LoggerFactory;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * "Simple" Twill application which is launching a HelloWorld-like Runnable.
  */
 public class SimpleTwillTest extends AbstractTwillLauncher {
 
-    @Test(timeout =  20000)
+    @Test(timeout = 20000)
     public void twillSimpleTest() throws InterruptedException, URISyntaxException {
 
         // Instantiate TwillRunnerService, and waiting for it to start
@@ -60,7 +58,7 @@ public class SimpleTwillTest extends AbstractTwillLauncher {
 
     /**
      * TwillRunnable.
-     *
+     * <p/>
      * Prints out something and completes.
      */
     public static class SimpleTwillApp extends AbstractTwillRunnable {
