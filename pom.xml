@@ -103,7 +103,7 @@
            <version>${commons.lang.version}</version>
            <!--scope>provided</scope-->
         </dependency>
-          <!-- Twill 0.5 requires Guava 13.0.1
+          <!-- Twill 0.5 requires Guava > 14
           because of AbstractExecutionThreadService.getServiceName
           being renamed in AbstractExecutionThreadService.serviceName
           in 14... -->

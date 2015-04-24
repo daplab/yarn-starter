@@ -89,10 +89,10 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
 
         try {
             ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setOAuthConsumerKey("pMZ4FULYSkbD5nfEAT4naZ3uR");
-            cb.setOAuthConsumerSecret("a67j1BOfBDHyJHOMFtDSbboP6IHr3AWRNhUZLg0rfMWZov9VwI");
-            cb.setOAuthAccessToken("3194873987-64a3xxxxxlIvTH3PDh1NiSfNQ4sqJIujHJze1CI1eeGF");
-            cb.setOAuthAccessTokenSecret("dTFwYOz9sm9EuEA787tYdkOsHzXAzumk92s8EB8p9YfwF");
+            cb.setOAuthConsumerKey("xxxxxx");
+            cb.setOAuthConsumerSecret("yyyyyy");
+            cb.setOAuthAccessToken("zzzzzzzz");
+            cb.setOAuthAccessTokenSecret("aaaaaaaa");
             cb.setJSONStoreEnabled(true);
             cb.setIncludeEntitiesEnabled(true);
 
