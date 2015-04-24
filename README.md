@@ -11,6 +11,9 @@ While still in the incubation phase, the project looks really promising and allo
 
 The goal of this project is to reduce the entry barrier of writing fault-tolerant YARN applications, mostly leveraging on Twill 
 ([version 0.5.0-incubating](http://twill.incubator.apache.org/apidocs-0.5.0-incubating/index.html) at the time of writing).
+Read more on Twill [here](http://blog.cask.co/2014/01/programming-with-apache-twill-part-ii/), 
+[here](http://blog.cask.co/2013/06/simplifying-yarn-introducing-weave-to-the-apache/) and 
+[here](http://jaxenter.com/developing-distributed-applications-with-apache-twill-107728.html).
 
 
 # Simple Twill App Example
