@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * Created by mil2048 on 4/22/15.
  */
 public abstract class AbstractTwillLauncher {
-    
+
     protected String zkConnect;
     protected EmbeddedZookeeper zkServer;
 
@@ -50,6 +50,9 @@ public abstract class AbstractTwillLauncher {
 
         // Keep log files locally for 10 minutes -- mandatory for debugging!!
         clusterConf.set("yarn.nodemanager.delete.debug-delay-sec", String.valueOf(TimeUnit.MINUTES.toSeconds(10)));
+
+        // Set the ZK address into yarn conf. Not required for MiniYARNCluster, but some applications might
+        // leverage on this option in real deployment scenarios.
         clusterConf.set("yarn.resourcemanager.zk-address", zkConnect);
 
         //conf.setInt(YarnConfiguration.RM_SCHEDULER_MINIMUM_ALLOCATION_MB, 64);
@@ -67,6 +70,9 @@ public abstract class AbstractTwillLauncher {
     public void tearDown() {
         if (miniCluster != null) {
             miniCluster.stop();
+        }
+        if (zkServer != null) {
+            zkServer.shutdown();
         }
     }
 }
