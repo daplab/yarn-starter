@@ -12,6 +12,7 @@ While still in the incubation phase, the project looks really promising and allo
 The goal of this project is to reduce the entry barrier of writing fault-tolerant YARN applications, mostly leveraging on Twill 
 ([version 0.5.0-incubating](http://twill.incubator.apache.org/apidocs-0.5.0-incubating/index.html) at the time of writing).
 
+
 # Simple Twill App Example
 
 [SimpleTwillTest](src/test/java/ch/daplab/yarn/twill/SimpleTwillTest.java) is a really trivial application deployed on YARN using Twill. The application basically prints out 
@@ -20,6 +21,7 @@ a "hello world"-like message and quits.
 The SimpleTwillTest test class extends [AbstractTwillLauncher](src/test/java/ch/daplab/yarn/twill/AbstractTwillLauncher.java) which takes care of 
 starting an embedded [Zookeeper](https://github.com/kafka-dev/kafka/blob/master/core/src/test/scala/unit/kafka/zk/EmbeddedZookeeper.scala) 
 server as well as a [MiniYARNCluster](https://svn.apache.org/repos/asf/hadoop/common/trunk/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-tests/src/test/java/org/apache/hadoop/yarn/server/MiniYARNCluster.java).
+
 
 # Multiple Runnable Twill App Example
 
@@ -31,6 +33,7 @@ This example runs 2 different applications:
 * 3 [Consumer](src/test/java/ch/daplab/yarn/twill/worker/Consumer.java)s, which will discover the redis instance and start reading the messages 
     (via [blpop](http://redis.io/commands/blpop) command).
 
+
 # Fault Tolerant Twitter Ingestion Twill App
 
 Leveraging on the two previous example, this Twill application is reading data from Twitter firehose using [Twitter4j](http://twitter4j.org/) 
@@ -40,11 +43,18 @@ Twitter4j has been wrapped as an [RxJava Observable](http://reactivex.io/RxJava/
 and is attached to and HDFS sink, partitioning the data by yyyy/mm/dd/hh/mm. This will be useful to create hive tables 
 later on, with proper partitions.
 
-Build it
+### Configure it
+
+The Twitter keys and secrets are currently hardcoded in `src/main/java/ch/daplab/yarn/twitter/rx/TwitterObservable.java` (yeah, it's in the TODO list :))
+Please store them there *before* building.
+
+### Build it
 
 ```
 mvn clean install
 ```
+
+### Run it
 
 And Run it in the [DAPLAB](http://daplab.ch) infrastucture like this:
 
