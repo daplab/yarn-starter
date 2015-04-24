@@ -61,6 +61,11 @@
             <name>Artifactory Cloudera Releases</name>
             <url>https://repository.cloudera.com/cloudera/cloudera-repos/</url>
         </repository>
+        <repository>
+            <id>typesafe</id>
+            <name>Typesafe Repository</name>
+            <url>http://repo.typesafe.com/typesafe/releases/</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -98,7 +103,7 @@
            <version>${commons.lang.version}</version>
            <!--scope>provided</scope-->
         </dependency>
-          <!-- Twill 0.5 requires Guava > 14
+          <!-- Twill 0.5 requires Guava 13.0.1
           because of AbstractExecutionThreadService.getServiceName
           being renamed in AbstractExecutionThreadService.serviceName
           in 14... -->
@@ -277,6 +282,16 @@
             <version>2.5.0-cdh5.3.2</version>
             <type>test-jar</type>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-remote</artifactId>
+            <version>2.0</version>
         </dependency>
     </dependencies>
 
