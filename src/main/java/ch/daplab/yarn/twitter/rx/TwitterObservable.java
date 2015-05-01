@@ -1,5 +1,6 @@
 package ch.daplab.yarn.twitter.rx;
 
+import ch.daplab.config.Config;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +13,14 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 /**
  * Created by killerwhile on 22/04/15.
  */
 public class TwitterObservable implements Observable.OnSubscribe<byte[]>, StatusListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterObservable.class);
+
+    private static final String CONFIG_FILE = "twitter.properties";
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -28,6 +30,12 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
     private TwitterStream twitterStream;
 
     private volatile AtomicReference<Subscriber<? super byte[]>> subscriberRef = new AtomicReference<>(null);
+    
+    private Config config;
+
+    public TwitterObservable() {
+        config = Config.load(CONFIG_FILE);
+    }
 
     @Override
     public void onException(Exception e) {
@@ -89,10 +97,10 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
 
         try {
             ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setOAuthConsumerKey("xxxxxx");
-            cb.setOAuthConsumerSecret("yyyyyy");
-            cb.setOAuthAccessToken("zzzzzzzz");
-            cb.setOAuthAccessTokenSecret("aaaaaaaa");
+            cb.setOAuthConsumerKey(config.getProperty("oAuthConsumerKey", ""));
+            cb.setOAuthConsumerSecret(config.getProperty("oAuthConsumerSecret", ""));
+            cb.setOAuthAccessToken(config.getProperty("oAuthAccessToken", ""));
+            cb.setOAuthAccessTokenSecret(config.getProperty("oAuthAccessTokenSecret", ""));
             cb.setJSONStoreEnabled(true);
             cb.setIncludeEntitiesEnabled(true);
 

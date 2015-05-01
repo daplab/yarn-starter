@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
  */
 public class SimpleTwillTest extends AbstractTwillLauncher {
 
-    @Test(timeout = 20000)
+    @Test(timeout = 80000)
     public void twillSimpleTest() throws InterruptedException, URISyntaxException {
 
         // Instantiate TwillRunnerService, and waiting for it to start

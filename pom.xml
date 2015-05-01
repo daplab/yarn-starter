@@ -174,15 +174,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.10</artifactId>
             <version>0.8.2.1</version>
@@ -282,7 +273,7 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor</artifactId>
             <version>2.0</version>
@@ -291,7 +282,13 @@
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-remote</artifactId>
             <version>2.0</version>
-        </dependency>
+        </dependency>-->
+<!--        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.4</version>
+            <scope>provided</scope>
+        </dependency>-->
     </dependencies>
 
     <build>
