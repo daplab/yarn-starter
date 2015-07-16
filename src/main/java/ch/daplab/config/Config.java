@@ -2,7 +2,6 @@ package ch.daplab.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,12 @@ public class Config {
         }
     }
     
-    public Optional<String> getProperty(String key){
-        return Optional.ofNullable(properties.getProperty(key));
+    public String getProperty(String key){
+        return properties.getProperty(key);
     }
 
     public String getProperty(String key, String def) {
-        return getProperty(key).orElse(def);
+        String value = getProperty(key); if (value == null) { return def; } else { return value; }
     }
 
     public Integer getProperty(String key, Integer def) {
