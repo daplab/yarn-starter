@@ -31,7 +31,7 @@ public class KafkaObserver implements Observer<byte[]> {
 
         Properties props = new Properties();
 
-        props.put("metadata.broker.list", "daplab-rt-11.fri.lan:9092,daplab-rt-13.fri.lan:9092");
+        props.put("metadata.broker.list", "daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         props.put("request.required.acks", "1");
 
