@@ -87,9 +87,9 @@ That's it, now you can kill the application and see how it will be restarted by 
 ## Twitter to Kafka
 
 Another version of the `TwitterTo` application is available: it reads from Twitter and publishes into Kafka.
+This version is slightly lighter than the toHDFS version as it's not a Twill application.
 
 The build and configure steps are the same than before, except that the topic must be created before running the application.
-
 
 ```
 kafka-topics.sh --zookeeper daplab-wn-22.fri.lan:2181 --create --topic $(whoami)_twitter --partitions 2 --replication-factor 2
@@ -103,5 +103,5 @@ kafka-topics.sh --zookeeper daplab-wn-22.fri.lan:2181 --create --topic $(whoami)
 ### Check if some tweets are flowing into  Kafka
 
 ```
-/usr/hdp/current/kafka-broker/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667 --topic twitter --time -1
+/usr/hdp/current/kafka-broker/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667 --topic  $(whoami)_twitter --time -1
 ```
