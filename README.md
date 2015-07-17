@@ -39,6 +39,8 @@ This example runs 2 different applications:
 
 # Fault Tolerant Twitter Ingestion Twill App
 
+## Twitter to HDFS
+
 Leveraging on the two previous example, this Twill application is reading data from Twitter firehose using [Twitter4j](http://twitter4j.org/) 
 and storing the data into HDFS.
 
@@ -54,15 +56,23 @@ Please store them there *before* building.
 ### Build it
 
 ```
-mvn clean install
+mvn clean install -DskipTests
 ```
+
+Note: `-DskipTests` is optional, but will make the build faster.
+
+### Configure it
+
+Note: to run it, you need to [register a Twitter application](http://iag.me/socialmedia/how-to-create-a-twitter-app-in-8-easy-steps/) to obtain oauth credentials.
+Store the credentials in the [twitter.properties config file](src/main/resources/twitter.properties).
+Also, you might want to run  ```git update-index --assume-unchanged src/main/resources/twitter.properties``` to avoid committing your credentials.
 
 ### Run it
 
 And Run it in the [DAPLAB](http://daplab.ch) infrastucture like this:
 
 ```
-./src/main/scripts/start-twitter-ingestion-app.sh daplab-wn-22.fri.lan:2181
+./src/main/scripts/start-twitter-ingestion-app.sh --zk.connect daplab-wn-22.fri.lan:2181 --root.path /tmp/$(whoami)/twitter
 ```
 
 By default data is stored under `/tmp/twitter/firehose`, monitor the ingestion process:
@@ -78,3 +88,25 @@ drwxrwxrwx   - yarn hdfs          0 2015-04-24 10:01 /tmp/twitter/firehose/2015/
 
 That's it, now you can kill the application and see how it will be restarted by YARN!
 
+
+## Twitter to Kafka
+
+Another version of the `TwitterTo` application is available: it reads from Twitter and publishes into Kafka.
+
+The build and configure steps are the same than before, except that the topic must be created before running the application.
+
+
+```
+kafka-topics.sh --zookeeper daplab-wn-22.fri.lan:2181 --create --topic $(whoami)_twitter --partitions 2 --replication-factor 2
+```
+
+### Run it
+```
+./src/main/scripts/start-twitter-ingestion-app.sh --zk.connect daplab-wn-22.fri.lan:2181 --broker.list daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667,daplab-rt-14.fri.lan:6667 --topic.name $(whoami}_twitter
+```
+
+### Check if some tweets are flowing into  Kafka
+
+```
+/usr/hdp/current/kafka-broker/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667 --topic twitter --time -1
+```

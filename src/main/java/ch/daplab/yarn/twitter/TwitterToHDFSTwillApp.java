@@ -38,11 +38,20 @@ public class TwitterToHDFSTwillApp extends AbstractTwillRunnable {
             conf.set("fs.defaultFS", defaultFs);
         }
 
+        String rootFolder = (String) optionSet.valueOf(OPTION_ROOT_FOLDER);
+        String partitionFormat = (String) optionSet.valueOf(OPTION_PARTITION_FORMAT);
+        String fileSuffix = (String) optionSet.valueOf(OPTION_FILE_SUFFIX);
+
+        String oAuthConsumerKey = (String) optionSet.valueOf("oAuthConsumerKey");
+        String oAuthConsumerSecret = (String) optionSet.valueOf("oAuthConsumerSecret");
+        String oAuthAccessToken = (String) optionSet.valueOf("oAuthAccessToken");
+        String oAuthAccessTokenSecret = (String) optionSet.valueOf("oAuthAccessTokenSecret");
+
         FileSystem fs = null;
         try {
             fs = FileSystem.get(FileSystem.getDefaultUri(conf), conf);
 
-            Observable.create(new TwitterObservable()).subscribe(new PartitionedObserver(DEFAULT_ROOT_FOLDER, DEFAULT_PARTITION_FORMAT, DEFAULT_FILE_SUFFIX, fs));
+            Observable.create(new TwitterObservable(oAuthConsumerKey, oAuthConsumerSecret, oAuthAccessToken, oAuthAccessTokenSecret)).subscribe(new PartitionedObserver(rootFolder, partitionFormat, fileSuffix, fs));
 
         } catch (IOException e) {
             LOG.error("Got an IOException", e);

@@ -1,16 +1,14 @@
 package ch.daplab.yarn.twitter;
 
+import ch.daplab.config.Config;
+import ch.daplab.kafka.sink.rx.KafkaObserver;
 import ch.daplab.yarn.AbstractAppLauncher;
+import ch.daplab.yarn.twitter.rx.TwitterObservable;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.hadoop.yarn.conf.YarnConfiguration;
-import org.apache.twill.api.TwillController;
-import org.apache.twill.api.TwillRunnerService;
-import org.apache.twill.api.logging.PrinterLogHandler;
-import org.apache.twill.yarn.YarnTwillRunnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rx.Observable;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -40,31 +38,12 @@ public class TwitterToKafkaCli extends AbstractAppLauncher {
     @Override
     protected int internalRun() throws Exception {
 
-        // Instantiate TwillRunnerService, and waiting for it to start
-        YarnConfiguration yarnConf = new YarnConfiguration(getConf());
-
-        TwillRunnerService runnerService = new YarnTwillRunnerService(
-                yarnConf, getZkConnect());
-
-        runnerService.startAndWait();
-
         String brokerList = (String)getOptions().valueOf(OPTION_BROKER_LIST);
-
         String topicName = (String)getOptions().valueOf(OPTION_TOPIC_NAME);
 
-        List<String> args = new ArrayList<>();
-        args.add("--" + OPTION_BROKER_LIST);
-        args.add(brokerList);
-        args.add("--" + OPTION_TOPIC_NAME);
-        args.add(topicName);
+        Config config = Config.load(TwitterObservable.CONFIG_FILE);
 
-        TwillController controller = runnerService.prepare(new TwitterToKafkaTwillApp())
-                .withApplicationArguments(args.toArray(new String[0]))
-                .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out))) // write TwillRunnable logs in local System.out
-                .start();
-
-        // Wait until the app is started
-        controller.startAndWait();
+        Observable.create(new TwitterObservable(config.getProperty("oAuthConsumerKey"), config.getProperty("oAuthConsumerSecret"), config.getProperty("oAuthAccessToken"), config.getProperty("oAuthAccessTokenSecret"))).subscribe(new KafkaObserver(topicName, brokerList));
 
         // Good, let it simply run on his own.
         return ReturnCode.ALL_GOOD;

@@ -1,5 +1,6 @@
 package ch.daplab.yarn.twitter.rx;
 
+import ch.daplab.config.Config;
 import org.junit.Test;
 import org.mockito.Mockito;
 import rx.Observable;
@@ -17,7 +18,10 @@ public class TwitterObservableTest {
 
         final int numberOfTweets = r.nextInt(100) + 100;
 
-        final TwitterObservable twitterObservable = new TwitterObservable();
+        Config config = Config.load(TwitterObservable.CONFIG_FILE);
+
+        final TwitterObservable twitterObservable = new TwitterObservable(config.getProperty("oAuthConsumerKey"), config.getProperty("oAuthConsumerSecret"), config.getProperty("oAuthAccessToken"), config.getProperty("oAuthAccessTokenSecret"));
+
         Observer<byte[]> observerMock = Mockito.mock(Observer.class);
 
         Observable<byte[]> observable = Observable.create(twitterObservable);

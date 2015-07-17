@@ -1,6 +1,8 @@
 package ch.daplab.yarn.twitter;
 
+import ch.daplab.config.Config;
 import ch.daplab.yarn.AbstractAppLauncher;
+import ch.daplab.yarn.twitter.rx.TwitterObservable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.util.Tool;
@@ -22,6 +24,9 @@ public class TwitterToHDFSCli extends AbstractAppLauncher {
     private static final Logger LOG = LoggerFactory.getLogger(TwitterToHDFSCli.class);
 
     public static final String OPTION_FS_DEFAULTFS = "fs.defaultFS";
+    public static final String OPTION_ROOT_FOLDER = "root.folder";
+    public static final String OPTION_PARTITION_FORMAT = "partition.format";
+    public static final String OPTION_FILE_SUFFIX = "file.suffix";
 
     public static final String DEFAULT_ROOT_FOLDER = "/tmp/twitter/firehose/";
     public static final String DEFAULT_FILE_SUFFIX = ".json";
@@ -46,6 +51,10 @@ public class TwitterToHDFSCli extends AbstractAppLauncher {
             defaultFS = FileSystem.getDefaultUri(getConf()).toString();
         }
 
+        String rootFolder = (String) getOptions().valueOf(OPTION_ROOT_FOLDER);
+        String partitionFormat = (String) getOptions().valueOf(OPTION_PARTITION_FORMAT);
+        String fileSuffix = (String) getOptions().valueOf(OPTION_FILE_SUFFIX);
+
         // Instantiate TwillRunnerService, and waiting for it to start
         YarnConfiguration yarnConf = new YarnConfiguration(getConf());
 
@@ -54,13 +63,32 @@ public class TwitterToHDFSCli extends AbstractAppLauncher {
 
         runnerService.startAndWait();
 
-
         List<String> args = new ArrayList<>();
         args.add("--" + OPTION_FS_DEFAULTFS);
         args.add(defaultFS);
 
+        args.add("--" + OPTION_ROOT_FOLDER);
+        args.add(rootFolder);
+
+        args.add("--" + OPTION_PARTITION_FORMAT);
+        args.add(partitionFormat);
+
+        args.add("--" + OPTION_FILE_SUFFIX);
+        args.add(fileSuffix);
+
+        Config config = Config.load(TwitterObservable.CONFIG_FILE);
+        args.add("--oAuthConsumerKey");
+        args.add(config.getProperty("oAuthConsumerKey"));
+        args.add("--oAuthConsumerSecret");
+        args.add(config.getProperty("oAuthConsumerSecret"));
+        args.add("--oAuthAccessToken");
+        args.add(config.getProperty("oAuthAccessToken"));
+        args.add("--oAuthAccessTokenSecret");
+        args.add(config.getProperty("oAuthAccessTokenSecret"));
+
         TwillController controller = runnerService.prepare(new TwitterToHDFSTwillApp())
                 .withApplicationArguments(args.toArray(new String[0]))
+                .withResources(getClass().getResource(TwitterObservable.CONFIG_FILE).toURI())
                 .addLogHandler(new PrinterLogHandler(new PrintWriter(System.out))) // write TwillRunnable logs in local System.out
                 .start();
 
@@ -75,7 +103,12 @@ public class TwitterToHDFSCli extends AbstractAppLauncher {
     protected void initParser() {
         getParser().accepts(OPTION_FS_DEFAULTFS, "FileSystem on which to store to. Defaults to fs.defaultFS from /etc/hadoop/conf/core-site.xml.")
                 .withRequiredArg();
-
+        getParser().accepts(OPTION_ROOT_FOLDER, "The root folder, inside the fileSystem, where the data is stored")
+                .withRequiredArg().defaultsTo(DEFAULT_ROOT_FOLDER);
+        getParser().accepts(OPTION_PARTITION_FORMAT, "The partitioning format, inside the root folder -- accepts Joda time formatting")
+                .withRequiredArg().defaultsTo(DEFAULT_PARTITION_FORMAT);
+        getParser().accepts(OPTION_FILE_SUFFIX, "The suffix of the file name")
+                .withRequiredArg().defaultsTo(DEFAULT_FILE_SUFFIX);
     }
 
 }

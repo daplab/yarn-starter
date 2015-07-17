@@ -20,7 +20,7 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterObservable.class);
 
-    private static final String CONFIG_FILE = "/twitter.properties";
+    public static final String CONFIG_FILE = "/twitter.properties";
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -30,11 +30,17 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
     private TwitterStream twitterStream;
 
     private volatile AtomicReference<Subscriber<? super byte[]>> subscriberRef = new AtomicReference<>(null);
-    
-    private Config config;
 
-    public TwitterObservable() {
-        config = Config.load(CONFIG_FILE);
+    private final String oAuthConsumerKey;
+    private final String oAuthConsumerSecret;
+    private final String oAuthAccessToken;
+    private final String oAuthAccessTokenSecret;
+
+    public TwitterObservable(String oAuthConsumerKey, String oAuthConsumerSecret, String oAuthAccessToken, String oAuthAccessTokenSecret) {
+        this.oAuthConsumerKey = oAuthConsumerKey;
+        this.oAuthConsumerSecret = oAuthConsumerSecret;
+        this.oAuthAccessToken = oAuthAccessToken;
+        this.oAuthAccessTokenSecret = oAuthAccessTokenSecret;
     }
 
     @Override
@@ -97,10 +103,10 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
 
         try {
             ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setOAuthConsumerKey(config.getProperty("oAuthConsumerKey", ""));
-            cb.setOAuthConsumerSecret(config.getProperty("oAuthConsumerSecret", ""));
-            cb.setOAuthAccessToken(config.getProperty("oAuthAccessToken", ""));
-            cb.setOAuthAccessTokenSecret(config.getProperty("oAuthAccessTokenSecret", ""));
+            cb.setOAuthConsumerKey(oAuthConsumerKey);
+            cb.setOAuthConsumerSecret(oAuthConsumerSecret);
+            cb.setOAuthAccessToken(oAuthAccessToken);
+            cb.setOAuthAccessTokenSecret(oAuthAccessTokenSecret);
             cb.setJSONStoreEnabled(true);
             cb.setIncludeEntitiesEnabled(true);
 
