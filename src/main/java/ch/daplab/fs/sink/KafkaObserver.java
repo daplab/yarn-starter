@@ -26,12 +26,12 @@ public class KafkaObserver implements Observer<byte[]> {
     private final String topic;
     private final Producer producer;
 
-    public KafkaObserver(String topic) {
+    public KafkaObserver(String topic, String brokerList) {
         this.topic = topic;
 
         Properties props = new Properties();
 
-        props.put("metadata.broker.list", "daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667");
+        props.put("metadata.broker.list", brokerList);
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         props.put("request.required.acks", "1");
 

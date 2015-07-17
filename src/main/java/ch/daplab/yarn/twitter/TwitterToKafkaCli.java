@@ -23,11 +23,11 @@ public class TwitterToKafkaCli extends AbstractAppLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterToKafkaCli.class);
 
-    public static final String OPTION_FS_DEFAULTFS = "fs.defaultFS";
+    public static final String OPTION_BROKER_LIST = "broker.list";
+    public static final String OPTION_BROKER_LIST_DEFAULT = "daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667,daplab-rt-14.fri.lan:6667";
 
-    public static final String DEFAULT_ROOT_FOLDER = "/tmp/twitter/firehose/";
-    public static final String DEFAULT_FILE_SUFFIX = ".json";
-    public static final String DEFAULT_PARTITION_FORMAT = "yyyy/MM/dd/HH/mm";
+    public static final String OPTION_TOPIC_NAME = "topic.name";
+    public static final String OPTION_TOPIC_NAME_DEFAULT = "twitter";
 
     private Configuration conf;
 
@@ -43,11 +43,6 @@ public class TwitterToKafkaCli extends AbstractAppLauncher {
     @Override
     protected int internalRun() throws Exception {
 
-        String defaultFS = (String) getOptions().valueOf(OPTION_FS_DEFAULTFS);
-        if (defaultFS == null) {
-            defaultFS = FileSystem.getDefaultUri(getConf()).toString();
-        }
-
         // Instantiate TwillRunnerService, and waiting for it to start
         YarnConfiguration yarnConf = new YarnConfiguration(getConf());
 
@@ -56,10 +51,15 @@ public class TwitterToKafkaCli extends AbstractAppLauncher {
 
         runnerService.startAndWait();
 
+        String brokerList = (String)getOptions().valueOf(OPTION_BROKER_LIST);
+
+        String topicName = (String)getOptions().valueOf(OPTION_TOPIC_NAME);
 
         List<String> args = new ArrayList<>();
-        args.add("--" + OPTION_FS_DEFAULTFS);
-        args.add(defaultFS);
+        args.add("--" + OPTION_BROKER_LIST);
+        args.add(brokerList);
+        args.add("--" + OPTION_TOPIC_NAME);
+        args.add(topicName);
 
         TwillController controller = runnerService.prepare(new TwitterToKafkaTwillApp())
                 .withApplicationArguments(args.toArray(new String[0]))
@@ -75,9 +75,10 @@ public class TwitterToKafkaCli extends AbstractAppLauncher {
 
     @Override
     protected void initParser() {
-        getParser().accepts(OPTION_FS_DEFAULTFS, "FileSystem on which to store to. Defaults to fs.defaultFS from /etc/hadoop/conf/core-site.xml.")
-                .withRequiredArg();
-
+        getParser().accepts(OPTION_BROKER_LIST, "Kafka broker list, comma separated")
+                .withRequiredArg().defaultsTo(OPTION_BROKER_LIST_DEFAULT);
+        getParser().accepts(OPTION_TOPIC_NAME, "Name of the Kafka topic")
+                .withRequiredArg().defaultsTo(OPTION_TOPIC_NAME_DEFAULT);
     }
 
 }

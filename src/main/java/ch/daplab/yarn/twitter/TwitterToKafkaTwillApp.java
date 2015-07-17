@@ -36,27 +36,13 @@ public class TwitterToKafkaTwillApp extends AbstractTwillRunnable {
 
         final Configuration conf = new Configuration();
 
-        String defaultFs = (String) optionSet.valueOf(OPTION_FS_DEFAULTFS);
+        String brokerList = (String) optionSet.valueOf(TwitterToKafkaCli.OPTION_BROKER_LIST);
+        String topicName = (String) optionSet.valueOf(TwitterToKafkaCli.OPTION_TOPIC_NAME);
 
-        if (defaultFs != null) {
-            conf.set("fs.defaultFS", defaultFs);
-        }
-
-        FileSystem fs = null;
         try {
-            fs = FileSystem.get(FileSystem.getDefaultUri(conf), conf);
-
-            Observable.create(new TwitterObservable()).subscribe(new KafkaObserver("twitter"));
-
-        } catch (IOException e) {
-            LOG.error("Got an IOException", e);
+            Observable.create(new TwitterObservable()).subscribe(new KafkaObserver(topicName, brokerList));
         } finally {
-            if (fs != null) {
-                try {
-                    fs.close();
-                } catch (IOException e) {
-                }
-            }
+            // noop
         }
     }
 }
