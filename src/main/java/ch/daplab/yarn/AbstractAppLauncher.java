@@ -68,7 +68,7 @@ public abstract class AbstractAppLauncher implements Tool, Closeable {
             System.err.println("Run with --" + OPTION_HELP + " for help.");
         }
 
-        if (options.has(OPTION_HELP) || invalidOptions) {
+        if (invalidOptions || options.has(OPTION_HELP)) {
             getParser().printHelpOn(System.out);
             return ReturnCode.HELP;
         }
