@@ -36,8 +36,7 @@ public class PartitionedObserver implements Observer<byte[]> {
     public PartitionedObserver(String prefix, String partitionFormat, TimeZone timeZone, String suffix, FileSystem fs) {
         this.fs = fs;
         partitioner = new Partitioner(prefix, partitionFormat, timeZone, suffix);
-        LOG.error("Writing to filesystem {}, partition {}", fs, partitioner);
-        System.out.println("(sysout) Writing to filesystem " + fs + ", partition " + partitioner);
+        LOG.debug("Writing to filesystem {}, partition {}", fs, partitioner);
     }
 
     @Override

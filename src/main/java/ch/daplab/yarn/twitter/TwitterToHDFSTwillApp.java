@@ -30,8 +30,6 @@ public class TwitterToHDFSTwillApp extends AbstractTwillRunnable {
 
         String[] arguments = (String[])ArrayUtils.addAll(getContext().getApplicationArguments(), getContext().getArguments());
 
-        System.out.println(Arrays.toString(arguments));
-
         final OptionParser parser = new OptionParser();
 
         TwitterToHDFSCli.initParser(parser);
@@ -54,9 +52,6 @@ public class TwitterToHDFSTwillApp extends AbstractTwillRunnable {
         String rootFolder = (String) optionSet.valueOf(OPTION_ROOT_FOLDER);
         String partitionFormat = (String) optionSet.valueOf(OPTION_PARTITION_FORMAT);
         String fileSuffix = (String) optionSet.valueOf(OPTION_FILE_SUFFIX);
-
-        System.out.println("rootFolder=" + rootFolder + ", partitionFormat=" + partitionFormat + ", fileSuffix=" + fileSuffix);
-
 
         String oAuthConsumerKey = (String) optionSet.valueOf("oAuthConsumerKey");
         String oAuthConsumerSecret = (String) optionSet.valueOf("oAuthConsumerSecret");
