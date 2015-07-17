@@ -8,9 +8,6 @@ import rx.Observer;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class TwitterObservableTest {
 
     private final Random r = new Random();

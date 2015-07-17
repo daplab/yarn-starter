@@ -1,4 +1,4 @@
-package ch.daplab.fs.sink;
+package ch.daplab.kafka.sink.rx;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
@@ -12,9 +12,6 @@ import java.util.Properties;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 @NotThreadSafe
 public class KafkaObserver implements Observer<byte[]> {
 
@@ -32,7 +29,7 @@ public class KafkaObserver implements Observer<byte[]> {
         Properties props = new Properties();
 
         props.put("metadata.broker.list", brokerList);
-        props.put("serializer.class", "kafka.serializer.StringEncoder");
+        props.put("serializer.class", "kafka.serializer.DefaultEncoder");
         props.put("request.required.acks", "1");
 
         ProducerConfig producerConfig = new ProducerConfig(props);

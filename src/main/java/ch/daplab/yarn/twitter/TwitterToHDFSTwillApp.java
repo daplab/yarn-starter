@@ -15,9 +15,6 @@ import java.io.IOException;
 
 import static ch.daplab.yarn.twitter.TwitterToHDFSCli.*;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class TwitterToHDFSTwillApp extends AbstractTwillRunnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterToHDFSTwillApp.class);

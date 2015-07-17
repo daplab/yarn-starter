@@ -17,9 +17,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class Consumer extends AbstractTwillRunnable implements ServiceDiscovered.ChangeListener {
 
     private static Logger LOG = LoggerFactory.getLogger(Consumer.class);

@@ -16,9 +16,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class TwitterToKafkaCli extends AbstractAppLauncher {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterToKafkaCli.class);

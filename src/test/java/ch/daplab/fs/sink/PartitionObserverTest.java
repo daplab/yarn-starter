@@ -20,9 +20,6 @@ import java.util.Random;
 import static ch.daplab.yarn.twitter.TwitterToHDFSCli.DEFAULT_FILE_SUFFIX;
 import static ch.daplab.yarn.twitter.TwitterToHDFSCli.DEFAULT_PARTITION_FORMAT;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class PartitionObserverTest {
 
     private Random r = new Random();

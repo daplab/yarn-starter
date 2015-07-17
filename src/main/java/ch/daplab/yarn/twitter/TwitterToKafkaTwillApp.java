@@ -1,31 +1,22 @@
 package ch.daplab.yarn.twitter;
 
-import ch.daplab.fs.sink.KafkaObserver;
-import ch.daplab.fs.sink.PartitionedObserver;
+import ch.daplab.kafka.sink.rx.KafkaObserver;
 import ch.daplab.yarn.twitter.rx.TwitterObservable;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.twill.api.AbstractTwillRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
 
-import java.io.IOException;
-
-import static ch.daplab.yarn.twitter.TwitterToHDFSCli.*;
-
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class TwitterToKafkaTwillApp extends AbstractTwillRunnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterToKafkaTwillApp.class);
 
     /**
      * Called by YARN nodeManager, i.e. remote (not on the same JVM) from the command line
-     * which startsd it.
+     * which starts it.
      */
     @Override
     public void run() {

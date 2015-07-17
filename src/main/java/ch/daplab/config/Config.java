@@ -2,6 +2,8 @@ package ch.daplab.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,8 @@ public class Config {
     private Config(String file) {
         properties = new Properties();
         try {
-            properties.load(new FileInputStream(file));
+            URL configFile = getClass().getResource(file);
+            properties.load(configFile.openStream());
         } catch (IOException ex) {
             LOG.error("Cannot load config file {}", file);
         }

@@ -4,9 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class Partitioner {
 
 

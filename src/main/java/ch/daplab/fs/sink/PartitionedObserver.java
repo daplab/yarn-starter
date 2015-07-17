@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 @NotThreadSafe
 public class PartitionedObserver implements Observer<byte[]> {
 

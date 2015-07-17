@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by bperroud on 31-Mar-15.
- */
 public abstract class SetupSimpleKafkaCluster {
 
+    protected static final long DEFAULT_TIMEOUT = 6000;
+    protected static final int NUMBER_OF_THREADS = 1;
+
     private int brokerId = 0;
-    protected int zkConnectionTimeout = 6000;
-    protected int zkSessionTimeout = 6000;
+    protected int zkConnectionTimeout = (int)DEFAULT_TIMEOUT;
+    protected int zkSessionTimeout = (int)DEFAULT_TIMEOUT;
 
     protected String zkConnect;
     protected EmbeddedZookeeper zkServer;

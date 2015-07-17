@@ -2,7 +2,9 @@ package ch.daplab.yarn.twill;
 
 import com.google.common.base.Preconditions;
 import kafka.utils.TestZKUtils;
+import kafka.utils.ZKStringSerializer$;
 import kafka.zk.EmbeddedZookeeper;
+import org.I0Itec.zkclient.ZkClient;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -17,13 +19,14 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public abstract class AbstractTwillLauncher {
+
+    protected int zkConnectionTimeout = 6000;
+    protected int zkSessionTimeout = 6000;
 
     protected String zkConnect;
     protected EmbeddedZookeeper zkServer;
+    protected ZkClient zkClient;
 
     protected MiniYARNCluster miniCluster;
 
@@ -39,6 +42,8 @@ public abstract class AbstractTwillLauncher {
         // setup Zookeeper
         zkConnect = TestZKUtils.zookeeperConnect();
         zkServer = new EmbeddedZookeeper(zkConnect);
+
+        zkClient = new ZkClient(zkServer.connectString(), zkConnectionTimeout, zkSessionTimeout, ZKStringSerializer$.MODULE$);
 
         CuratorFramework curatorFramework = CuratorFrameworkFactory.builder().connectString(zkConnect)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))

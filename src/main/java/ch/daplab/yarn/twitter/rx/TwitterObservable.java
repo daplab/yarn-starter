@@ -20,7 +20,7 @@ public class TwitterObservable implements Observable.OnSubscribe<byte[]>, Status
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterObservable.class);
 
-    private static final String CONFIG_FILE = "twitter.properties";
+    private static final String CONFIG_FILE = "/twitter.properties";
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 

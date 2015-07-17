@@ -25,8 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class SimpleTest extends SetupSimpleKafkaCluster {
 
     private static final String topic = "test123";
-    private static final long DEFAULT_TIMEOUT = 10000;
-    private static final int NUMBER_OF_THREADS = 1;
+
 
     private static final Random r = new Random();
 

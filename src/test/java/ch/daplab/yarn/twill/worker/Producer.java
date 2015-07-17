@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by mil2048 on 4/22/15.
- */
 public class Producer extends AbstractTwillRunnable {
 
     private static Logger LOG = LoggerFactory.getLogger(Consumer.class);
