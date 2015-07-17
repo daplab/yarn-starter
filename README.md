@@ -50,8 +50,9 @@ later on, with proper partitions.
 
 ### Configure it
 
-The Twitter keys and secrets are currently hardcoded in [`TwitterObservable.java`](src/main/java/ch/daplab/yarn/twitter/rx/TwitterObservable.java) (yeah, it's in the [TODO list](https://github.com/daplab/yarn-starter/issues/1) :))
-Please store them there *before* building.
+Action Required: to be able to run the application, you need to [register a Twitter application](http://iag.me/socialmedia/how-to-create-a-twitter-app-in-8-easy-steps/)
+to obtain oauth credentials. Store the credentials in the [twitter.properties config file](src/main/resources/twitter.properties).
+Also, you might want to run  ```git update-index --assume-unchanged src/main/resources/twitter.properties``` to avoid committing your credentials.
 
 ### Build it
 
@@ -61,18 +62,12 @@ mvn clean install -DskipTests
 
 Note: `-DskipTests` is optional, but will make the build faster.
 
-### Configure it
-
-Note: to run it, you need to [register a Twitter application](http://iag.me/socialmedia/how-to-create-a-twitter-app-in-8-easy-steps/) to obtain oauth credentials.
-Store the credentials in the [twitter.properties config file](src/main/resources/twitter.properties).
-Also, you might want to run  ```git update-index --assume-unchanged src/main/resources/twitter.properties``` to avoid committing your credentials.
-
 ### Run it
 
 And Run it in the [DAPLAB](http://daplab.ch) infrastucture like this:
 
 ```
-./src/main/scripts/start-twitter-ingestion-app.sh --zk.connect daplab-wn-22.fri.lan:2181 --root.path /tmp/$(whoami)/twitter
+./src/main/scripts/start-twitter-ingestion-app.sh --zk.connect daplab-wn-22.fri.lan:2181 --root.folder /tmp/$(whoami)/twitter
 ```
 
 By default data is stored under `/tmp/twitter/firehose`, monitor the ingestion process:

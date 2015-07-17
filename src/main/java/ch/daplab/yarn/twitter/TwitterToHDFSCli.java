@@ -3,6 +3,7 @@ package ch.daplab.yarn.twitter;
 import ch.daplab.config.Config;
 import ch.daplab.yarn.AbstractAppLauncher;
 import ch.daplab.yarn.twitter.rx.TwitterObservable;
+import joptsimple.OptionParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.util.Tool;
@@ -101,14 +102,17 @@ public class TwitterToHDFSCli extends AbstractAppLauncher {
 
     @Override
     protected void initParser() {
-        getParser().accepts(OPTION_FS_DEFAULTFS, "FileSystem on which to store to. Defaults to fs.defaultFS from /etc/hadoop/conf/core-site.xml.")
-                .withRequiredArg();
-        getParser().accepts(OPTION_ROOT_FOLDER, "The root folder, inside the fileSystem, where the data is stored")
-                .withRequiredArg().defaultsTo(DEFAULT_ROOT_FOLDER);
-        getParser().accepts(OPTION_PARTITION_FORMAT, "The partitioning format, inside the root folder -- accepts Joda time formatting")
-                .withRequiredArg().defaultsTo(DEFAULT_PARTITION_FORMAT);
-        getParser().accepts(OPTION_FILE_SUFFIX, "The suffix of the file name")
-                .withRequiredArg().defaultsTo(DEFAULT_FILE_SUFFIX);
+        initParser(getParser());
     }
 
+    static void initParser(OptionParser parser) {
+        parser.accepts(OPTION_FS_DEFAULTFS, "FileSystem on which to store to. Defaults to fs.defaultFS from /etc/hadoop/conf/core-site.xml.")
+                .withRequiredArg();
+        parser.accepts(OPTION_ROOT_FOLDER, "The root folder, inside the fileSystem, where the data is stored")
+                .withRequiredArg().defaultsTo(DEFAULT_ROOT_FOLDER);
+        parser.accepts(OPTION_PARTITION_FORMAT, "The partitioning format, inside the root folder -- accepts Joda time formatting")
+                .withRequiredArg().defaultsTo(DEFAULT_PARTITION_FORMAT);
+        parser.accepts(OPTION_FILE_SUFFIX, "The suffix of the file name")
+                .withRequiredArg().defaultsTo(DEFAULT_FILE_SUFFIX);
+    }
 }
