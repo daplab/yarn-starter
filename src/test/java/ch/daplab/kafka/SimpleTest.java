@@ -26,7 +26,6 @@ public class SimpleTest extends SetupSimpleKafkaCluster {
 
     private static final String topic = "test123";
 
-
     private static final Random r = new Random();
 
     @Test

@@ -84,15 +84,16 @@ drwxrwxrwx   - yarn hdfs          0 2015-04-24 10:01 /tmp/twitter/firehose/2015/
 That's it, now you can kill the application and see how it will be restarted by YARN!
 
 
-## Twitter to Kafka
+## Bonus: Twitter to Kafka
 
 Another version of the `TwitterTo` application is available: it reads from Twitter and publishes into Kafka.
-This version is slightly lighter than the toHDFS version as it's not a Twill application.
+This version is slightly lighter than the `toHDFS` version as it's not a YARN application -- it is running as standalone
+daemon to run from the gateway.
 
 The build and configure steps are the same than before, except that the topic must be created before running the application.
 
 ```
-kafka-topics.sh --zookeeper daplab-wn-22.fri.lan:2181 --create --topic $(whoami)_twitter --partitions 2 --replication-factor 2
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --zookeeper daplab-wn-22.fri.lan:2181 --create --topic $(whoami)_twitter --partitions 2 --replication-factor 2
 ```
 
 ### Run it

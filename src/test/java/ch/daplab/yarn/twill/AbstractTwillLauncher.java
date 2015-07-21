@@ -1,5 +1,6 @@
 package ch.daplab.yarn.twill;
 
+import ch.daplab.kafka.SetupSimpleKafkaCluster;
 import com.google.common.base.Preconditions;
 import kafka.utils.TestZKUtils;
 import kafka.utils.ZKStringSerializer$;
@@ -15,23 +16,17 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 
-public abstract class AbstractTwillLauncher {
-
-    protected int zkConnectionTimeout = 6000;
-    protected int zkSessionTimeout = 6000;
-
-    protected String zkConnect;
-    protected EmbeddedZookeeper zkServer;
-    protected ZkClient zkClient;
+public abstract class AbstractTwillLauncher extends SetupSimpleKafkaCluster {
 
     protected MiniYARNCluster miniCluster;
 
     @Before
-    public void setup() throws InterruptedException, YarnException {
+    public void setup() throws Exception {
 
         File binJava = new File("/bin/java");
         if (!binJava.isFile()) {
@@ -39,17 +34,8 @@ public abstract class AbstractTwillLauncher {
                     "Please ensure you have JAVA_HOME environment variable set properly (or less recommeneded a symlink to /bin/java)");
         }
 
-        // setup Zookeeper
-        zkConnect = TestZKUtils.zookeeperConnect();
-        zkServer = new EmbeddedZookeeper(zkConnect);
-
-        zkClient = new ZkClient(zkServer.connectString(), zkConnectionTimeout, zkSessionTimeout, ZKStringSerializer$.MODULE$);
-
-        CuratorFramework curatorFramework = CuratorFrameworkFactory.builder().connectString(zkConnect)
-                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
-                .build();
-        curatorFramework.start();
-        assertTrue("Failed to connect to Zookeeper " + zkConnect, curatorFramework.blockUntilConnected(60, TimeUnit.SECONDS));
+        // setup Zookeeper and Kafka in the parent class
+        super.setup();
 
         YarnConfiguration clusterConf = new YarnConfiguration();
 
@@ -66,18 +52,18 @@ public abstract class AbstractTwillLauncher {
         miniCluster = new MiniYARNCluster("miniyarn1", 1, 1, 1);
         miniCluster.init(clusterConf);
         miniCluster.start();
-        miniCluster.waitForNodeManagersToConnect(5000);
+
+        assertTrue("NodeManager(s) failed to connect", miniCluster.waitForNodeManagersToConnect(60000));
 
     }
 
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
         if (miniCluster != null) {
             miniCluster.stop();
         }
-        if (zkServer != null) {
-            zkServer.shutdown();
-        }
+
+        super.tearDown();
     }
 }

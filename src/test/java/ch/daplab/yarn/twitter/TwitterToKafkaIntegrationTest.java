@@ -1,5 +1,6 @@
 package ch.daplab.yarn.twitter;
 
+import ch.daplab.kafka.SetupSimpleKafkaCluster;
 import ch.daplab.yarn.twill.AbstractTwillLauncher;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -9,6 +10,7 @@ import kafka.server.KafkaServer;
 import kafka.utils.MockTime;
 import kafka.utils.TestUtils;
 import kafka.utils.Time;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.yarn.exceptions.YarnException;
 import org.junit.After;
@@ -23,34 +25,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Ignore
-public class TwitterToKafkaIntegrationTest extends AbstractTwillLauncher {
-
-    private int brokerId = 0;
-    protected KafkaServer kafkaServer;
-    protected List<KafkaServer> servers = new ArrayList<>();
-
-    @Override
-    @Before
-    public void setup() throws YarnException, InterruptedException {
-        super.setup();
-
-        int port = TestUtils.choosePort();
-        Properties props = TestUtils.createBrokerConfig(brokerId, port, true);
-
-        KafkaConfig config = new KafkaConfig(props);
-        Time mock = new MockTime();
-        kafkaServer = TestUtils.createServer(config, mock);
-        servers.add(kafkaServer);
-    }
-
-    @After
-    public void tearDown() {
-
-        if (kafkaServer != null) {
-            kafkaServer.shutdown();
-        }
-        super.tearDown();
-    }
+public class TwitterToKafkaIntegrationTest extends SetupSimpleKafkaCluster {
 
     @Test
     public void test() throws Exception {
@@ -71,21 +46,10 @@ public class TwitterToKafkaIntegrationTest extends AbstractTwillLauncher {
         args.add("--" + TwitterToKafkaCli.OPTION_TOPIC_NAME);
         args.add(topicName);
 
-
-        int res = ToolRunner.run(miniCluster.getConfig(), new TwitterToKafkaCli(), args.toArray(new String[0]));
+        int res = ToolRunner.run(new Configuration(), new TwitterToKafkaCli(), args.toArray(new String[0]));
 
         // wait few more seconds
         Thread.sleep(20000);
 
-    }
-
-    protected static String kafkaServersToListOfString(List<KafkaServer> servers) {
-        return Joiner.on(",").join(Iterables.transform(servers, new Function<KafkaServer, String>() {
-            @Nullable
-            @Override
-            public String apply(KafkaServer input) {
-                return input.socketServer().host() + ":" + input.socketServer().port();
-            }
-        }));
     }
 }

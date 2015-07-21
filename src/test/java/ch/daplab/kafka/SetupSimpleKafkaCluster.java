@@ -11,13 +11,18 @@ import org.I0Itec.zkclient.ZkClient;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.test.TestingServer;
 import org.junit.After;
 import org.junit.Before;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 public abstract class SetupSimpleKafkaCluster {
 
@@ -29,7 +34,8 @@ public abstract class SetupSimpleKafkaCluster {
     protected int zkSessionTimeout = (int)DEFAULT_TIMEOUT;
 
     protected String zkConnect;
-    protected EmbeddedZookeeper zkServer;
+    protected TestingServer zkServer;
+    protected TestingServer zkServer2;
     protected ZkClient zkClient;
     protected KafkaServer kafkaServer;
     protected List<KafkaServer> servers = new ArrayList<>();
@@ -40,28 +46,31 @@ public abstract class SetupSimpleKafkaCluster {
     public void setup() throws Exception {
 
         // setup Zookeeper
-        zkConnect = TestZKUtils.zookeeperConnect();
-        zkServer = new EmbeddedZookeeper(zkConnect);
-        zkClient = new ZkClient(zkServer.connectString(), zkConnectionTimeout, zkSessionTimeout, ZKStringSerializer$.MODULE$);
-
-        // setup Broker
-        int port = TestUtils.choosePort();
-        Properties props = TestUtils.createBrokerConfig(brokerId, port, true);
-
-        KafkaConfig config = new KafkaConfig(props);
-        Time mock = new MockTime();
-        kafkaServer = TestUtils.createServer(config, mock);
-        servers.add(kafkaServer);
+        zkServer = new TestingServer();
+        zkConnect = zkServer.getConnectString();
 
         curatorFramework = CuratorFrameworkFactory.builder().connectString(zkConnect)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))
                 .connectionTimeoutMs(zkConnectionTimeout).sessionTimeoutMs(zkSessionTimeout)
                 .build();
         curatorFramework.start();
+        assertTrue("Failed to connect to Zookeeper " + zkConnect, curatorFramework.blockUntilConnected(60, TimeUnit.SECONDS));
+
+        zkClient = new ZkClient(zkConnect, zkConnectionTimeout, zkSessionTimeout, ZKStringSerializer$.MODULE$);
+
+        // setup Broker
+        int port = TestUtils.choosePort();
+        Properties props = TestUtils.createBrokerConfig(brokerId, port, true);
+        props.put("zookeeper.connect", zkConnect);
+
+        KafkaConfig config = new KafkaConfig(props);
+        Time mock = new MockTime();
+        kafkaServer = TestUtils.createServer(config, mock);
+        servers.add(kafkaServer);
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
 
         if (curatorFramework != null) {
             curatorFramework.close();
@@ -76,7 +85,7 @@ public abstract class SetupSimpleKafkaCluster {
         }
 
         if (zkServer != null) {
-            zkServer.shutdown();
+            zkServer.close();
         }
 
     }

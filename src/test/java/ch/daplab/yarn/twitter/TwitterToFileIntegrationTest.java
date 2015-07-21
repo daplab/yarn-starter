@@ -14,11 +14,9 @@ public class TwitterToFileIntegrationTest extends AbstractTwillLauncher {
     @Test
     public void test() throws Exception {
 
-
         List<String> args = new ArrayList<>();
         args.add("--zk.connect");
         args.add(zkConnect);
-
 
         int res = ToolRunner.run(miniCluster.getConfig(), new TwitterToHDFSCli(), args.toArray(new String[0]));
 
