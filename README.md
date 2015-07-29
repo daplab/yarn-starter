@@ -98,7 +98,7 @@ The build and configure steps are the same than before, except that the topic mu
 
 ### Run it
 ```
-./src/main/scripts/start-twitter-ingestion-app.sh --zk.connect daplab-wn-22.fri.lan:2181 --broker.list daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667,daplab-rt-14.fri.lan:6667 --topic.name $(whoami}_twitter
+./src/main/scripts/start-twitter-to-kafka-ingestion-app.sh --zk.connect daplab-wn-22.fri.lan:2181 --broker.list daplab-rt-11.fri.lan:6667,daplab-rt-13.fri.lan:6667,daplab-rt-14.fri.lan:6667 --topic.name $(whoami)_twitter
 ```
 
 ### Check if some tweets are flowing into  Kafka
