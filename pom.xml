@@ -75,6 +75,11 @@
             <name>HDP Releases</name>
             <url>http://repo.hortonworks.com/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>HDPReleasesPublic</id>
+            <name>HDP Releases Public</name>
+            <url>http://repo.hortonworks.com/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -169,12 +174,6 @@
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
             <version>${metrics-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-test</artifactId>
-            <version>${apache.hadoop.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
