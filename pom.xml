@@ -46,8 +46,7 @@
         <commons-cli.version>1.2</commons-cli.version>
         <commons.lang.version>2.6</commons.lang.version>
         <slf4j.version>1.7.5</slf4j.version>
-        <apache.hadoop.core.version>2.5.0-mr1-cdh5.2.1</apache.hadoop.core.version>
-        <apache.hadoop.version>2.5.0-cdh5.2.1</apache.hadoop.version>
+        <apache.hadoop.version>2.6.0</apache.hadoop.version>
         <hadoop.lzo.version>0.4.15-gplextras5.0.0</hadoop.lzo.version>
         <metrics-core.version>3.0.2</metrics-core.version>
     </properties>
@@ -65,6 +64,16 @@
             <id>typesafe</id>
             <name>Typesafe Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
+        </repository>
+        <repository>
+            <id>apache</id>
+            <name>Apache Repository</name>
+            <url>https://repository.apache.org/</url>
+        </repository>
+        <repository>
+            <id>HDPReleases</id>
+            <name>HDP Releases</name>
+            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
         </repository>
     </repositories>
 
@@ -147,7 +156,7 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
-            <version>${apache.hadoop.core.version}</version>
+            <version>${apache.hadoop.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -170,7 +179,7 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-minicluster</artifactId>
-            <version>${apache.hadoop.core.version}</version>
+            <version>${apache.hadoop.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -254,22 +263,22 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-yarn-client</artifactId>
-            <version>2.5.0-cdh5.3.2</version>
+            <version>${apache.hadoop.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-yarn-common</artifactId>
-            <version>2.5.0-cdh5.3.2</version>
+            <version>${apache.hadoop.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-yarn-api</artifactId>
-            <version>2.5.0-cdh5.3.2</version>
+            <version>${apache.hadoop.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-yarn-server-tests</artifactId>
-            <version>2.5.0-cdh5.3.2</version>
+            <version>${apache.hadoop.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -289,6 +298,11 @@
             <version>1.16.4</version>
             <scope>provided</scope>
         </dependency>-->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -349,5 +363,74 @@
             </plugin>
         </plugins>
     </build>
+
+        <profiles>
+        <profile>
+            <id>findbug</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>${maven.findbugs.version}</version>
+                        <configuration>
+                            <xmlOutput>true</xmlOutput>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>findbugs</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>hadoop26</id>
+            <properties>
+                <apache.hadoop.version>2.6.0</apache.hadoop.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>hadoop27</id>
+            <properties>
+                <apache.hadoop.version>2.7.1</apache.hadoop.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>cdh52</id>
+            <properties>
+                <apache.hadoop.version>2.5.0-cdh5.2.6</apache.hadoop.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>cdh53</id>
+            <properties>
+                <apache.hadoop.version>2.5.0-cdh5.3.6</apache.hadoop.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>cdh54</id>
+            <properties>
+                <apache.hadoop.version>2.6.0-cdh5.4.5</apache.hadoop.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>hdp22</id>
+            <properties>
+                <apache.hadoop.version>2.6.0.2.2.6.0-2800</apache.hadoop.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>hdp23</id>
+            <properties>
+                <apache.hadoop.version>2.7.1.2.3.0.0-2557</apache.hadoop.version>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
