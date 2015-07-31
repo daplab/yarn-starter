@@ -173,7 +173,7 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-test</artifactId>
-            <version>${apache.hadoop.core.version}</version>
+            <version>${apache.hadoop.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
